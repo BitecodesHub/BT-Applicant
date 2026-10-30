@@ -26,6 +26,7 @@ import type { Tone } from '../lib/format'
 import { call, openPath } from '../lib/api'
 import { fmtDateTime, formatBytes, humanizeCategory, plural, severityMeta, timeAgo, timeUntil } from '../lib/format'
 import { useNow } from '../lib/hooks'
+import { machineName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -90,7 +91,7 @@ export default function Diagnostics() {
       <PageHeader
         eyebrow="Local health"
         title="Diagnostics"
-        desc="Everything this app knows about its own runtime: database, queue, worker leases, source health, AI circuits, and retained errors. Nothing is sent off this Mac."
+        desc={`Everything this app knows about its own runtime: database, queue, worker leases, source health, AI circuits, and retained errors. Nothing is sent off ${machineName}.`}
         actions={
           <>
             <Button variant="secondary" onClick={() => setReportOpen(true)}>
@@ -387,7 +388,7 @@ export default function Diagnostics() {
                 { k: 'Outbound adapter', v: data.system.mail.mode === 'smtp' ? 'Live SMTP' : 'Mock outbox' },
                 { k: 'Kill switch', v: data.system.mail.killSwitch ? 'Engaged' : 'Off' },
                 { k: 'SMTP configured', v: data.system.mail.smtpConfigured ? 'Yes' : 'No' },
-                { k: 'SMTP credential', v: data.system.mail.credentialPresent ? 'Present in keychain' : 'Missing' }
+                { k: 'SMTP credential', v: data.system.mail.credentialPresent ? 'Stored securely' : 'Missing' }
               ]}
             />
             <div className="row small muted mt-3" style={{ gap: 8 }}>

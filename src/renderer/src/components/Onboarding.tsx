@@ -17,6 +17,7 @@ import type { BootstrapDTO, ProfileDTO, ResumeDTO } from '@shared/api'
 import type { RemoteType, WorkAuthorizationStatus } from '@shared/types'
 import { call } from '../lib/api'
 import { authStatusMeta, country, fmtDate, formatBytes, isEmail, plural } from '../lib/format'
+import { yourMachine } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -309,7 +310,7 @@ export default function Onboarding({ bootstrap, onComplete }: { bootstrap: Boots
           </div>
         </div>
         <div style={{ marginTop: 54, maxWidth: 380 }}>
-          <h2 style={{ fontSize: 27, lineHeight: 1.22, letterSpacing: '-0.03em' }}>A quiet job search that stays on your Mac.</h2>
+          <h2 style={{ fontSize: 27, lineHeight: 1.22, letterSpacing: '-0.03em' }}>{`A quiet job search that stays on ${yourMachine}.`}</h2>
           <p className="hero-lede mt-3">
             Discovery, eligibility, and drafting run locally. Email delivery is mocked until you unlock it, and web forms are never
             submitted without you.

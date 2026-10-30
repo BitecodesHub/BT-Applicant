@@ -29,6 +29,7 @@ import type { BootstrapDTO } from '@shared/api'
 import { call } from '../lib/api'
 import { aiModeLabels, fmtDate, timeAgo } from '../lib/format'
 import { useNow } from '../lib/hooks'
+import { paletteShortcut } from '../lib/platform'
 import { Button, Input, Modal, StatusDot, cx, useToast } from './ui'
 
 interface NavItem {
@@ -297,8 +298,8 @@ export default function AppShell({ bootstrap, children }: { bootstrap: Bootstrap
           <Button variant="secondary" size="sm" onClick={() => scan.mutate()} loading={scan.isPending} title="Queue a discovery scan for every enabled target">
             <RefreshCw /> Scan
           </Button>
-          <button type="button" className="top-chip" onClick={() => setPaletteOpen(true)} title="Command palette (⌘K)" aria-label="Open command palette">
-            ⌘K
+          <button type="button" className="top-chip" onClick={() => setPaletteOpen(true)} title={`Command palette (${paletteShortcut})`} aria-label="Open command palette">
+            {paletteShortcut}
           </button>
           <Button
             variant="ghost"
@@ -318,7 +319,7 @@ export default function AppShell({ bootstrap, children }: { bootstrap: Bootstrap
         </main>
       </div>
 
-      <Modal open={paletteOpen} onOpenChange={setPaletteOpen} title="Jump to" desc="Search every page, or run a quick action. Press ⌘K at any time.">
+      <Modal open={paletteOpen} onOpenChange={setPaletteOpen} title="Jump to" desc={`Search every page, or run a quick action. Press ${paletteShortcut} at any time.`}>
         <div className="stack">
           <Input
             autoFocus

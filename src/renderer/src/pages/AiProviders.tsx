@@ -22,6 +22,7 @@ import type { AiProviderId } from '@shared/types'
 import type { AiSettings } from '@shared/settings'
 import { call } from '../lib/api'
 import { aiModeLabels, plural, timeAgo } from '../lib/format'
+import { keychainName, machineName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -55,7 +56,7 @@ const PROVIDER_INFO: Record<AiProviderId, ProviderInfo> = {
     model: 'llama3.2',
     local: true,
     key: null,
-    description: 'Runs on this Mac through a local server. No API key and no cloud request.',
+    description: `Runs on ${machineName} through a local server. No API key and no cloud request.`,
     icon: Cpu
   },
   anthropic: {
@@ -63,7 +64,7 @@ const PROVIDER_INFO: Record<AiProviderId, ProviderInfo> = {
     model: 'claude-sonnet-4-5',
     local: false,
     key: 'ai.anthropic',
-    description: 'Cloud API. The key is stored in the macOS keychain and sent only to Anthropic.',
+    description: `Cloud API. The key is stored in ${keychainName} and sent only to Anthropic.`,
     icon: Cloud
   },
   openai: {
@@ -160,7 +161,7 @@ function AiWorkspace({
     mutationFn: (provider: AiProviderId) => call('secrets.set', { key: PROVIDER_INFO[provider].key!, value: keyInputs[provider]!.trim() }),
     onSuccess: (_keys, provider) => {
       setKeyInputs((current) => ({ ...current, [provider]: '' }))
-      toast.success(`${PROVIDER_INFO[provider].label} key stored in the macOS keychain.`)
+      toast.success(`${PROVIDER_INFO[provider].label} key stored in ${keychainName}.`)
       refresh()
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : String(error))
@@ -307,7 +308,7 @@ function AiWorkspace({
             </div>
             {draft.mode !== 'enhanced' ? (
               <Notice tone="info" className="mt-3">
-                In this mode no AI request leaves the machine, even if keys are stored. Keys remain in the keychain and can be used again by switching back
+                In this mode no AI request leaves the machine, even if keys are stored. Keys remain in {keychainName} and can be used again by switching back
                 to AI enhanced.
               </Notice>
             ) : null}
@@ -524,9 +525,9 @@ function AiWorkspace({
             {dirty ? <div className="tiny faint mt-2">You have unsaved changes. Save first to test them.</div> : null}
           </Panel>
 
-          <Panel title="Cloud credentials" sub="Stored in the macOS keychain through Electron safeStorage.">
+          <Panel title="Cloud credentials" sub={`Stored in ${keychainName} through Electron safeStorage.`}>
             {secretsLoading ? (
-              <PageLoading label="Reading keychain" />
+              <PageLoading label="Reading stored credentials" />
             ) : (
               <div className="stack">
                 {(['anthropic', 'openai', 'gemini', 'openai_compatible'] as AiProviderId[]).map((provider) => {
@@ -574,7 +575,7 @@ function AiWorkspace({
                 <div className="tiny faint">Ollama runs locally and needs no credential. A stored key is only used when its provider appears in the chain and enhanced mode is active.</div>
               </div>
             )}
-            {secretsLoading ? null : <div className="mt-3 tiny faint">{plural(secretKeys.filter((key) => key.startsWith('ai.')).length, 'AI credential')} present in the keychain.</div>}
+            {secretsLoading ? null : <div className="mt-3 tiny faint">{plural(secretKeys.filter((key) => key.startsWith('ai.')).length, 'AI credential')} present in {keychainName}.</div>}
           </Panel>
 
           <Panel title="Provider health" sub={statusLoading ? 'Refreshing…' : 'Circuit state is stored locally and survives restarts.'} flush>
@@ -621,7 +622,7 @@ function AiWorkspace({
         description={
           removeKeyFor ? (
             <>
-              The key for <strong>{PROVIDER_INFO[removeKeyFor].label}</strong> will be deleted from the macOS keychain. The provider will be skipped in the
+              The key for <strong>{PROVIDER_INFO[removeKeyFor].label}</strong> will be deleted from {keychainName}. The provider will be skipped in the
               chain until a new key is stored. Other providers are unaffected.
             </>
           ) : null

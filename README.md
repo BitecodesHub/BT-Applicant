@@ -44,6 +44,15 @@ First run opens a five-step onboarding: identity, work authorization, targets, r
 | `pnpm package:mac` | Unsigned `.app` in `release/mac-arm64` |
 | `pnpm verify:packaged` | Launch the packaged app with fresh user data and assert schema, defaults, and zero renderer errors |
 | `pnpm dist:mac` | Unsigned DMG and ZIP for arm64 |
+| `pnpm verify:all` | Full local verification: typecheck, unit tests, E2E, DMG/ZIP build, and packaged-app smoke test |
+
+Run every local check, the full UI walkthrough, the release build, and the fresh-install smoke test with one command:
+
+```bash
+pnpm verify:all
+```
+
+It regenerates screenshots and the unsigned release artifacts. Live source checks are separate because they require network access: `pnpm verify:sources`.
 
 ## Where data lives
 

@@ -1,17 +1,46 @@
 import { _electron as electron } from '@playwright/test'
-import { mkdirSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import assert from 'node:assert/strict'
 
 delete process.env.ELECTRON_RUN_AS_NODE
 
-const root = '/tmp/bt-applicant-packaged'
+const version = JSON.parse(readFileSync('package.json', 'utf8')).version
+const releaseDir = join(process.cwd(), 'release')
+
+const BINARY_CANDIDATES = {
+  darwin: [
+    join('BT Applicant.app', 'Contents', 'MacOS', 'bt-applicant'),
+    join('BT Applicant.app', 'Contents', 'MacOS', 'BT Applicant')
+  ],
+  win32: ['bt-applicant.exe', 'BT Applicant.exe'],
+  linux: ['bt-applicant', 'BT Applicant']
+}
+
+function findPackagedBinary() {
+  const candidates = BINARY_CANDIDATES[process.platform]
+  assert.ok(candidates, `Packaged verification is not implemented for ${process.platform}`)
+  assert.ok(existsSync(releaseDir), `No ${releaseDir} directory. Run npm run dist first.`)
+  for (const entry of readdirSync(releaseDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue
+    for (const candidate of candidates) {
+      const path = join(releaseDir, entry.name, candidate)
+      if (existsSync(path)) return path
+    }
+  }
+  throw new Error(`No packaged binary found under ${releaseDir}. Run npm run dist first.`)
+}
+
+const root = join(tmpdir(), 'bt-applicant-packaged')
 const userData = join(root, 'userdata')
 rmSync(root, { recursive: true, force: true })
 mkdirSync(userData, { recursive: true })
 
-const executablePath = join(process.cwd(), 'release', 'mac-arm64', 'BT Applicant.app', 'Contents', 'MacOS', 'BT Applicant')
+const executablePath = findPackagedBinary()
+console.log(`Launching ${executablePath}`)
+
 const app = await electron.launch({
   executablePath,
   env: { ...process.env, BT_APPLICANT_USER_DATA: userData },
@@ -30,7 +59,7 @@ try {
   await page.waitForTimeout(800)
 
   const bootstrap = await page.evaluate(() => globalThis.api.invoke('app.bootstrap'))
-  assert.equal(bootstrap.system.version, '0.1.0', 'package version')
+  assert.equal(bootstrap.system.version, version, 'package version')
   assert.equal(bootstrap.system.schemaVersion, 4, 'schema version')
   assert.equal(bootstrap.onboarded, false, 'fresh install is not onboarded')
   assert.equal(bootstrap.settings.chat.enabled, false, 'chat is off by default')
@@ -63,6 +92,8 @@ try {
   assert.deepEqual(errors, [], `renderer errors: ${errors.join('; ')}`)
 
   console.log(JSON.stringify({
+    platform: process.platform,
+    binary: executablePath,
     version: bootstrap.system.version,
     schemaVersion: bootstrap.system.schemaVersion,
     migrations,

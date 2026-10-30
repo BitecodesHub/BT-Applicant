@@ -102,7 +102,7 @@ export class MailService {
     }
     const outbound = getSection(this.db, 'outbound')
     const password = this.secrets.get('smtp.password')
-    if (!password) return { ok: false, mode, message: 'No SMTP password is stored in the keychain.' }
+    if (!password) return { ok: false, mode, message: 'No SMTP password is stored in the OS secret store.' }
     try {
       const transporter = this.transporter(password)
       await transporter.verify()
@@ -145,7 +145,7 @@ export class MailService {
   private async sendSmtp(message: MailMessage): Promise<MailSendResult> {
     const outbound = getSection(this.db, 'outbound')
     const password = this.secrets.get('smtp.password')
-    if (!password) throw new Error('SMTP password is missing from the keychain.')
+    if (!password) throw new Error('SMTP password is missing from the OS secret store.')
 
     const transporter = this.transporter(password)
     const info = await transporter.sendMail({

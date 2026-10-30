@@ -21,13 +21,13 @@ let stopStarted = false
 const cipher: SecretCipher = {
   encrypt: (plainText: string): string => {
     if (!safeStorage.isEncryptionAvailable()) {
-      throw new Error('The operating system keychain is unavailable, so secrets cannot be stored safely.')
+      throw new Error('The operating system secret store is unavailable, so secrets cannot be stored safely.')
     }
     return safeStorage.encryptString(plainText).toString('base64')
   },
   decrypt: (cipherText: string): string => {
     if (!safeStorage.isEncryptionAvailable()) {
-      throw new Error('The operating system keychain is unavailable, so stored secrets cannot be read.')
+      throw new Error('The operating system secret store is unavailable, so stored secrets cannot be read.')
     }
     return safeStorage.decryptString(Buffer.from(cipherText, 'base64'))
   }
@@ -77,13 +77,13 @@ function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 1480,
     height: 960,
-    minWidth: 1120,
-    minHeight: 760,
+    minWidth: 980,
+    minHeight: 640,
     show: false,
     title: 'BT Applicant',
     backgroundColor: '#0b0d10',
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
-    trafficLightPosition: { x: 18, y: 18 },
+    ...(process.platform === 'darwin' ? { trafficLightPosition: { x: 18, y: 18 } } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
@@ -201,6 +201,8 @@ process.on('unhandledRejection', (reason) => {
 })
 
 const gotLock = app.requestSingleInstanceLock()
+// Windows attributes taskbar grouping and toast notifications to this id, not to the executable.
+if (process.platform === 'win32') app.setAppUserModelId('com.bitecodes.btapplicant')
 if (!gotLock) {
   app.quit()
 } else {

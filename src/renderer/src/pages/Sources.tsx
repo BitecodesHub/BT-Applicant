@@ -19,6 +19,7 @@ import {
 import type { ConnectorDTO, SourceDTO } from '@shared/api'
 import { call, openExternal, queryKeys } from '../lib/api'
 import { country, durationText, fmtDateTime, humanize, plural, timeAgo } from '../lib/format'
+import { keychainName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -121,7 +122,7 @@ export default function Sources() {
 
       <Notice tone="info" className="mb-4">
         <span>
-          Credentials are stored in the operating system keychain through Electron safeStorage, never in the SQLite database or logs. A source only
+          Credentials are stored in {keychainName} through Electron safeStorage, never in the SQLite database or logs. A source only
           contributes postings for the countries you assign to it.
         </span>
       </Notice>
@@ -227,7 +228,7 @@ export default function Sources() {
         title="Remove this source?"
         description={
           deleting
-            ? `${deleting.label} will stop being polled, and its stored credentials will be removed from the keychain. Jobs already stored from this source are retained, along with their provenance.`
+            ? `${deleting.label} will stop being polled, and its stored credentials will be removed from ${keychainName}. Jobs already stored from this source are retained, along with their provenance.`
             : ''
         }
         confirmLabel="Remove source"
@@ -383,7 +384,7 @@ function SourceEditor({
       return { saved, credentialsSaved: entered.length }
     },
     onSuccess: (result) => {
-      toast.success(`Source saved${result.credentialsSaved ? ` · ${plural(result.credentialsSaved, 'credential')} stored in the keychain` : ''}.`)
+      toast.success(`Source saved${result.credentialsSaved ? ` · ${plural(result.credentialsSaved, 'credential')} stored in ${keychainName}` : ''}.`)
       onSaved()
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : String(error))
@@ -500,7 +501,7 @@ function SourceEditor({
       {connector && connector.credentialFields.length > 0 ? (
         <div className="form-section mt-3">
           <div className="form-section-title">Credentials</div>
-          <div className="form-section-desc">Stored in the OS keychain. Existing values are never displayed again.</div>
+          <div className="form-section-desc">Stored in {keychainName}. Existing values are never displayed again.</div>
           <div className="stack">
             {connector.credentialFields.map((field) => {
               const saved = secretKeys.includes(`source.${resolvedId}.${field.key}`)
@@ -520,7 +521,7 @@ function SourceEditor({
                     autoComplete="off"
                     value={credentials[field.key] ?? ''}
                     onChange={(event) => setCredentials((current) => ({ ...current, [field.key]: event.target.value }))}
-                    placeholder={saved ? 'Saved in keychain' : 'Enter value'}
+                    placeholder={saved ? 'Saved securely' : 'Enter value'}
                   />
                 </Field>
               )

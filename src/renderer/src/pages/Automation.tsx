@@ -23,6 +23,7 @@ import type { ApplicationChannel } from '@shared/types'
 import type { AppSettings, AutomationSettings, DigestSettings, OutboundSettings } from '@shared/settings'
 import { call } from '../lib/api'
 import { channelMeta, fmtDateTime, outboxStatusMeta, plural, timeAgo } from '../lib/format'
+import { keychainName, machineName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -150,7 +151,7 @@ function Workspace({
     mutationFn: () => call('secrets.set', { key: 'smtp.password', value: passwordInput.trim() }),
     onSuccess: () => {
       setPasswordInput('')
-      toast.success('SMTP app password stored in the macOS keychain.')
+      toast.success(`SMTP app password stored in ${keychainName}.`)
       refreshMail()
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : String(error))
@@ -160,7 +161,7 @@ function Workspace({
     mutationFn: () => call('secrets.delete', { key: 'smtp.password' }),
     onSuccess: () => {
       setRemovePassword(false)
-      toast.success('SMTP password removed from the keychain.')
+      toast.success(`SMTP password removed from ${keychainName}.`)
       refreshMail()
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : String(error))
@@ -203,7 +204,7 @@ function Workspace({
 
       {outbound.killSwitch ? (
         <Notice tone="warn" className="mb-4" icon={Lock}>
-          <strong>The outbound kill switch is on.</strong> No message can leave this Mac, even if SMTP is fully configured. Application emails are written to the
+          <strong>The outbound kill switch is on.</strong> No message can leave {machineName}, even if SMTP is fully configured. Application emails are written to the
           local mock outbox for inspection. Turn the switch off deliberately before any live send.
         </Notice>
       ) : null}
@@ -466,7 +467,7 @@ function Workspace({
                   <div className="row" style={{ gap: 8 }}>
                     <KeyRound size={14} className={passwordPresent ? 'color-green' : 'faint'} />
                     <span className="small strong">SMTP app password</span>
-                    <Badge tone={passwordPresent ? 'success' : 'neutral'}>{passwordPresent ? 'Stored in keychain' : 'Not stored'}</Badge>
+                    <Badge tone={passwordPresent ? 'success' : 'neutral'}>{passwordPresent ? 'Stored encrypted' : 'Not stored'}</Badge>
                   </div>
                   {passwordPresent ? (
                     <button
@@ -592,7 +593,7 @@ function Workspace({
               </div>
               <div className="row-between">
                 <span className="small muted">App password</span>
-                <span className="small">{passwordPresent ? 'Stored in keychain' : 'Missing'}</span>
+                <span className="small">{passwordPresent ? 'Stored encrypted' : 'Missing'}</span>
               </div>
               <div className="row-between">
                 <span className="small muted">From address</span>
@@ -649,7 +650,7 @@ function Workspace({
             <div className="stack small muted" style={{ lineHeight: 1.65 }}>
               <div className="row" style={{ alignItems: 'flex-start', gap: 9 }}>
                 <Lock size={14} className="color-green" style={{ marginTop: 2, flex: 'none' }} />
-                <span>Secrets and the database stay on this Mac. There is no cloud account and no remote sync.</span>
+                <span>Secrets and the database stay on {machineName}. There is no cloud account and no remote sync.</span>
               </div>
               <div className="row" style={{ alignItems: 'flex-start', gap: 9 }}>
                 <ShieldCheck size={14} className="color-green" style={{ marginTop: 2, flex: 'none' }} />

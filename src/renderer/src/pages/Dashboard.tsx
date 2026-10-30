@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import type { DailyMetricsSnapshot } from '@shared/types'
 import { call } from '../lib/api'
+import { machineName } from '../lib/platform'
 import {
   applicationStatusMeta,
   channelMeta,
@@ -89,7 +90,7 @@ export default function Dashboard() {
       <PageHeader
         eyebrow="Autopilot · local workspace"
         title={firstName ? `${greeting()}, ${firstName}.` : 'Your desk is ready.'}
-        desc="Discovery, eligibility, and drafting run on this Mac. Every number below comes from stored records — nothing is estimated."
+        desc={`Discovery, eligibility, and drafting run on ${machineName}. Every number below comes from stored records — nothing is estimated.`}
         actions={
           <>
             <Link to="/daily">

@@ -13,16 +13,35 @@ mac:
   category: public.app-category.productivity
   icon: build/icon.icns
   target:
-    - target: dmg
-      arch:
-        - arm64
-    - target: zip
-      arch:
-        - arm64
+    - dmg
+    - zip
   identity: null
   hardenedRuntime: false
   gatekeeperAssess: false
   darkModeSupport: true
 dmg:
   title: BT Applicant
-  artifactName: ${productName}-${version}-${arch}.${ext}
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+win:
+  executableName: bt-applicant
+  icon: build/icon.ico
+  target:
+    - nsis
+    - zip
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  deleteAppDataOnUninstall: false
+  artifactName: ${productName}-${version}-win-${arch}-setup.${ext}
+linux:
+  executableName: bt-applicant
+  icon: build/icon.png
+  target:
+    - AppImage
+    - zip
+  category: Utility
+  syncDesktopName: true
+  synopsis: Local-first job discovery and application desk
+  description: Discover eligible jobs, draft applications, and deliver them only after approval.

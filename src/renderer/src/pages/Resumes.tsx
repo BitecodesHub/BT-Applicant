@@ -21,6 +21,7 @@ import {
 import type { ResumeDTO, ResumeExtractionDTO } from '@shared/api'
 import { call } from '../lib/api'
 import { fmtDateTime, formatBytes, timeAgo } from '../lib/format'
+import { machineName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -147,7 +148,7 @@ export default function Resumes() {
       <PageHeader
         eyebrow="Candidate file"
         title="Resumes"
-        desc="Files are copied into the app’s managed folder, hashed for integrity, and read on this Mac. Text extraction and field detection are deterministic; no AI provider and no network call is involved."
+        desc={`Files are copied into the app’s managed folder, hashed for integrity, and read on ${machineName}. Text extraction and field detection are deterministic; no AI provider and no network call is involved.`}
         actions={
           <Button variant="primary" onClick={() => upload.mutate()} loading={upload.isPending}>
             <Upload /> Add resume
@@ -309,7 +310,7 @@ export default function Resumes() {
                   <CheckCircle2 size={15} className="color-green" style={{ marginTop: 2, flex: 'none' }} />
                   <span>
                     <strong className="color-green">On-device extraction.</strong> PDF, DOCX, RTF, Markdown, and text files are read with local
-                    libraries. The document never leaves this Mac and is never sent to an AI provider.
+                    libraries. The document never leaves {machineName} and is never sent to an AI provider.
                   </span>
                 </div>
                 <div className="row" style={{ alignItems: 'flex-start', gap: 10 }}>

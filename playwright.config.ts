@@ -1,4 +1,6 @@
 import { defineConfig } from '@playwright/test'
+import { E2E_ROOT } from './e2e/paths'
+import { join } from 'node:path'
 
 export default defineConfig({
   testDir: './e2e',
@@ -9,7 +11,7 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   reporter: [['list']],
-  outputDir: '/tmp/bt-applicant-e2e/test-results',
+  outputDir: join(E2E_ROOT, 'test-results'),
   use: {
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',

@@ -138,7 +138,7 @@ test('offline walkthrough, approval, delivery, and persistence', async () => {
   await expect(page.getByText('BT Applicant · status').first()).toBeVisible()
   await capture(page, '16-chat')
 
-  await page.keyboard.press('Meta+k')
+  await page.keyboard.press(process.platform === 'darwin' ? 'Meta+k' : 'Control+k')
   const palette = page.getByRole('dialog')
   await expect(palette).toBeVisible()
   const paletteSearch = palette.getByRole('combobox', { name: 'Search pages and actions' })
@@ -396,7 +396,7 @@ test('chat settings validate, save, and fail safely without credentials', async 
   const verifyToken = 'e2e-verify-token-123456'
   await page.getByRole('textbox', { name: 'WhatsApp verify token' }).fill(verifyToken)
   await page.getByRole('button', { name: 'Save WhatsApp verify token' }).click()
-  await expect(page.getByText('WhatsApp verify token stored in the macOS keychain.').first()).toBeVisible()
+  await expect(page.getByText(/^WhatsApp verify token stored in /i).first()).toBeVisible()
   await expect
     .poll(async () => (await invoke<{ secrets: { whatsappVerifyToken: boolean } }>(page, 'chat.page')).secrets.whatsappVerifyToken)
     .toBe(true)

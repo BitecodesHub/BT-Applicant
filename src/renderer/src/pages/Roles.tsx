@@ -4,6 +4,7 @@ import { Check, Plus, RefreshCw, Sparkles, Target, Trash2, TriangleAlert } from 
 import type { RoleRecommendationDTO, RoleSelectionPageDTO } from '@shared/api'
 import { call } from '../lib/api'
 import { timeAgo } from '../lib/format'
+import { machineName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -306,7 +307,7 @@ export default function Roles() {
               <div className="small faint">No roles selected. Each target country’s own job titles are used.</div>
             )}
             <div className="tiny faint mt-3">
-              Saving writes the list above to this Mac. Selected roles are stored separately from target countries; both are applied together.
+              Saving writes the list above to {machineName}. Selected roles are stored separately from target countries; both are applied together.
             </div>
           </Panel>
 
@@ -341,7 +342,7 @@ export default function Roles() {
             <div className="stack" style={{ gap: 6 }}>
               <div>
                 <strong>Read this before using a recommendation.</strong> The ranking is a decision aid, not legal, immigration, or career advice. It
-                compares only the evidence stored on this Mac: extracted resume text, profile skills, stated experience, certifications, and postings
+                compares only the evidence stored on {machineName}: extracted resume text, profile skills, stated experience, certifications, and postings
                 already discovered in your enabled countries.
               </div>
               <div>

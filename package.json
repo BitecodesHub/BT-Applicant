@@ -6,6 +6,7 @@
   "author": "BT Applicant",
   "license": "UNLICENSED",
   "main": "./out/main/index.js",
+  "desktopName": "com.bitecodes.btapplicant.desktop",
   "scripts": {
     "dev": "electron-vite dev",
     "build": "electron-vite build",
@@ -16,8 +17,12 @@
     "test:e2e": "electron-vite build && tsx e2e/fixture.ts && playwright test",
     "verify:sources": "tsx scripts/verify-sources.ts",
     "verify:packaged": "node scripts/verify-packaged.mjs",
-    "package:mac": "electron-vite build && electron-builder --mac --arm64 --dir",
-    "dist:mac": "electron-vite build && electron-builder --mac --arm64"
+    "verify:all": "node scripts/verify-all.mjs",
+    "package": "electron-vite build && electron-builder --dir",
+    "dist": "electron-vite build && electron-builder",
+    "dist:mac": "electron-vite build && electron-builder --mac",
+    "dist:win": "electron-vite build && electron-builder --win",
+    "dist:linux": "electron-vite build && electron-builder --linux"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.4.1",

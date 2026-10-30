@@ -22,6 +22,7 @@ import type { ChatPageDTO, ChatProviderStatusDTO, ChatTestResultDTO } from '@sha
 import type { ChatSettings } from '@shared/settings'
 import { call } from '../lib/api'
 import { plural, timeAgo } from '../lib/format'
+import { keychainName } from '../lib/platform'
 import {
   Badge,
   Button,
@@ -118,7 +119,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
     mutationFn: (input: { key: string; value: string }) => call('secrets.set', input),
     onSuccess: (_keys, input) => {
       setSecretInputs((current) => ({ ...current, [input.key]: '' }))
-      toast.success(`${SECRET_LABELS[input.key] ?? 'Secret'} stored in the macOS keychain.`)
+      toast.success(`${SECRET_LABELS[input.key] ?? 'Secret'} stored in ${keychainName}.`)
       refresh()
     },
     onError: (error) => toast.error(error instanceof Error ? error.message : String(error))
@@ -231,7 +232,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
 
       {!draft.enabled ? (
         <Notice tone="info" className="mb-4" icon={MessageCircle}>
-          <strong>Chat is off.</strong> Nothing polls Telegram and no webhook is listening. Stored tokens stay encrypted in the macOS keychain and can be reused
+          <strong>Chat is off.</strong> Nothing polls Telegram and no webhook is listening. Stored tokens stay encrypted in {keychainName} and can be reused
           when you switch chat back on.
         </Notice>
       ) : null}
@@ -272,7 +273,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
           icon={Link2}
         />
         <StatCard
-          label="Keychain secrets"
+          label="Encrypted secrets"
           value={storedSecrets}
           unit="of 4"
           foot={storedSecrets === 4 ? 'Every channel secret is stored' : 'Missing secrets are listed per channel'}
@@ -325,7 +326,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
                 />
                 {secretField(
                   SECRETS.telegramToken,
-                  'Create a bot with @BotFather, then paste the token here. It is encrypted with the macOS keychain.',
+                  `Create a bot with @BotFather, then paste the token here. It is encrypted with ${keychainName}.`,
                   '123456789:AA…'
                 )}
                 <Field
@@ -711,7 +712,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
               <SecurityPoint
                 icon={KeyRound}
                 title="Encrypted credentials"
-                desc="Bot tokens, access tokens, verify tokens, and app secrets are encrypted through the OS keychain. They are never rendered back to the interface or written to the audit log."
+                desc={`Bot tokens, access tokens, verify tokens, and app secrets are encrypted through ${keychainName}. They are never rendered back to the interface or written to the audit log.`}
               />
               <SecurityPoint
                 icon={MessageCircle}
@@ -736,7 +737,7 @@ function ChatWorkspace({ page }: { page: ChatPageDTO }) {
         title="Remove this secret?"
         description={
           <>
-            <strong>{removeSecret ? SECRET_LABELS[removeSecret] : ''}</strong> will be deleted from the keychain. The channel that needs it stops starting until a
+            <strong>{removeSecret ? SECRET_LABELS[removeSecret] : ''}</strong> will be deleted from {keychainName}. The channel that needs it stops starting until a
             new value is stored. Existing chat records are kept.
           </>
         }
