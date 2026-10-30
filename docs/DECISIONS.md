@@ -10,7 +10,7 @@ Date: 2026-10-29. Format: context, options, decision, consequences. Decisions ma
 
 **Decision.** Electron 45 with `electron-vite`.
 
-**Consequences.** One runtime for all domain code; native module risk is avoided by using the built-in `node:sqlite`. The app is large (~324 MB unpacked) and macOS-only packaging is a separate step. Web-form handoff can reuse an Electron window instead of bundling a second browser.
+**Consequences.** One runtime for all domain code; native module risk is avoided by using the built-in `node:sqlite`. The app is large (~324 MB unpacked) and packaging is a separate step. Web-form handoff can reuse an Electron window instead of bundling a second browser.
 
 ## D2. SQLite through `node:sqlite`, not `better-sqlite3` + Drizzle
 
@@ -102,13 +102,13 @@ Date: 2026-10-29. Format: context, options, decision, consequences. Decisions ma
 
 **Consequences.** The product is a careful assistant, not a spam engine. Unattended mode exists but is explicit, capped, and still cannot handle web forms or unresolved facts.
 
-## D13. Secrets in the OS keychain, never in the renderer
+## D13. Secrets in the OS secret store, never in the renderer
 
 **Context.** SMTP passwords and AI API keys are high-value and easy to leak through logs or UI state.
 
 **Decision.** Encrypt with Electron `safeStorage` before writing to SQLite (`secrets` table). Decrypt only inside the main process at call time. Renderer APIs return presence/flags, never values. Logs redact password/token/secret/authorization fields.
 
-**Consequences.** A copied database does not expose secrets without the OS keychain. Moving the database to another machine requires re-entering secrets. On a system without keychain support, secret storage fails closed rather than writing plaintext.
+**Consequences.** A copied database does not expose secrets without the OS secret store behind it: the macOS Keychain, Windows data protection (DPAPI), or a Linux Secret Service keyring. Moving the database to another machine requires re-entering secrets. Where the OS offers no encryption, `safeStorage.isEncryptionAvailable()` is false and secret storage fails closed rather than writing plaintext.
 
 ## D14. Local reads are always fresh
 
@@ -138,9 +138,9 @@ Date: 2026-10-29. Format: context, options, decision, consequences. Decisions ma
 
 **Context.** Signing and notarisation require an Apple Developer ID and network access to Apple services. The build environment has no credentials.
 
-**Decision.** `electron-builder` packages an unsigned arm64 `.app`/DMG with `identity: null` and hardened runtime off. The README and SECURITY.md describe what a distributed build must add.
+**Decision.** `electron-builder` packages an unsigned build for the host platform with `identity: null` and hardened runtime off: DMG/ZIP on macOS, NSIS/ZIP on Windows, AppImage/ZIP on Linux. The README and SECURITY.md describe what a distributed build must add.
 
-**Consequences.** The packaged app runs locally and can be inspected. It is not suitable for public distribution as-is; Gatekeeper will warn on other machines. This is explicit rather than hidden.
+**Consequences.** The packaged app runs locally and can be inspected. It is not suitable for public distribution as-is; Gatekeeper will warn on other Macs, SmartScreen will flag the unsigned Windows installer, and Linux has no signature to check. This is explicit rather than hidden.
 
 ## D18. Resumes are read locally, reviewed, and imported without overwriting
 

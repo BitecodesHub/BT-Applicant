@@ -21,7 +21,7 @@ Scope: what survives a crash, what retries, what deliberately does not retry, an
 | Events | Append-only; every state transition and maintenance action is recorded |
 | Exports | Jobs, applications, events, and outbox can be exported to CSV/JSON from the UI; the data folder can be opened from Diagnostics |
 
-The database is not encrypted at rest. Secrets inside it are encrypted individually with the OS keychain. FileVault or equivalent is the recommended baseline for the machine.
+The database is not encrypted at rest. Secrets inside it are encrypted individually through the OS secret store (macOS Keychain, Windows DPAPI, or the Linux Secret Service keyring). FileVault, BitLocker, or an encrypted Linux home directory is the recommended baseline for the machine.
 
 ## 3. Queue semantics
 
@@ -204,4 +204,6 @@ Check the provider status and last error. Notifications are best-effort and inde
 - 22 chat tests: command router, allowlist, dedupe, Telegram update handling and cursor, WhatsApp signature/webhook parsing, confirmation-code expiry/single-use/channel binding, notification cursors, redaction, retention.
 - 20 eligibility tests, 6 AI tests, and 5 HTTP guard tests cover authorization rules, failover/circuit behavior, and SSRF rejection. 121 tests across 9 files, all passing.
 - E2E: full offline run including roles, resume upload and review, approval, mock delivery, a simulated AI outage, chat settings with validation and secret lifecycle, the command palette, relaunch persistence, and a stale-cache regression check on the submitted application page. Two Playwright scenarios, both passing.
+- `npm run verify:all` runs typecheck, the 121 tests, both E2E scenarios, the release build for the current platform, and the packaged first-run check in one command, stopping at the first failure. Last full run on 2026-10-31: all five steps passed on macOS 27.2 arm64 (about 111 seconds).
+- Windows and Linux targets build from this macOS host; neither has been run on native hardware, so their platform-specific behaviour (secret store, notifications, window chrome) is unverified. See [TEST-REPORT.md 3.4](./TEST-REPORT.md#34-cross-platform-pass-2026-10-31).
 - Details: [TEST-REPORT.md](./TEST-REPORT.md).

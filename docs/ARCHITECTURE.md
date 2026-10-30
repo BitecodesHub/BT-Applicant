@@ -1,6 +1,6 @@
 # Architecture — BT Applicant
 
-Version 0.1.0. Desktop application for macOS (arm64). No server, no cloud database, no background daemon.
+Version 0.1.0. Desktop application for macOS, Windows, and Linux; verified running on macOS arm64, with Windows and Linux artifacts built by the same configuration. No server, no cloud database, no background daemon.
 
 ## 1. System at a glance
 
@@ -44,7 +44,7 @@ Why this shape:
 | Renderer → main | `contextIsolation: true`, `sandbox: true`, `nodeIntegration: false`; only the functions in `src/preload/index.ts` are exposed |
 | Web content → app | external links open in the OS browser; employer forms open in a separate sandboxed `BrowserWindow` with a persistent partition |
 | Main → network | explicit connector endpoints; user-supplied URLs only in the JSON-LD connector |
-| Secrets | Electron `safeStorage` (macOS Keychain) encrypts before SQLite; never sent to the renderer |
+| Secrets | Electron `safeStorage` (macOS Keychain, Windows DPAPI, or the Linux Secret Service keyring) encrypts before SQLite; never sent to the renderer |
 | Renderer → user data | responses are typed DTOs, no raw database rows and no secrets |
 
 Content Security Policy is applied in production (`default-src 'self'`, no remote scripts, no frames). Development adds the Vite websocket and eval allowances.
@@ -229,7 +229,7 @@ Role targeting:
 
 Mock mode writes RFC 5322 `.eml` files under the app's mock outbox directory (`<userData>/mock-outbox`), including attachments. It never opens a socket.
 
-SMTP uses nodemailer with the app password decrypted from the Keychain at send time. The app verifies SMTP login on request and reports the result; verification does not send an application.
+SMTP uses nodemailer with the app password decrypted from the OS secret store at send time. The app verifies SMTP login on request and reports the result; verification does not send an application.
 
 Defaults are `mode: mock`, `killSwitch: true`. Turning both off is an explicit, documented action in Automation & outbound. Daily and per-company limits apply before the outbox row is created.
 
@@ -266,12 +266,14 @@ Meta webhook ── HTTPS tunnel → 127.0.0.1:4780 ───────┘    
 
 ## 13. Packaging
 
-`electron-vite` produces three bundles under `out/`: main, preload, renderer. `electron-builder` packages `out/` plus production dependencies into an ASAR, with the icon in `build/icon.icns`.
+`electron-vite` produces three bundles under `out/`: main, preload, renderer. `electron-builder` packages `out/` plus production dependencies into an ASAR, with per-platform icons (`build/icon.icns`, `build/icon.ico`, `build/icon.png`) and the platform's own executable name (`BT Applicant` on macOS, `bt-applicant.exe` on Windows, `bt-applicant` on Linux).
 
-- `npm run package:mac` → unsigned `.app` directory in `release/mac-arm64`.
-- `npm run dist:mac` → DMG and ZIP for arm64.
-- Signing identity is explicitly `null` and hardened runtime is off for the local build. A distributed build must be signed with a Developer ID and notarised; see [SECURITY.md](./SECURITY.md#13-packaging-and-distribution).
-- The app writes only to its Electron user-data directory: database, logs, uploaded resumes, mock outbox, exports.
+- `npm run package` → unsigned unpacked app for the machine you build on, in `release/`.
+- `npm run dist` → that platform's artifacts: DMG + ZIP on macOS, NSIS installer + ZIP on Windows, AppImage + ZIP on Linux.
+- `npm run dist:mac`, `dist:win`, `dist:linux` → build one platform from another. From this macOS host all three targets were produced; electron-builder needs macOS for the macOS target, so Windows and Linux hosts build only their own.
+- Signing identity is explicitly `null` and the hardened runtime is off for the local build. A distributed macOS build needs a Developer ID plus notarisation, Windows needs Authenticode, Linux needs a signed repository or Flatpak; see [SECURITY.md](./SECURITY.md#13-packaging-and-distribution).
+- The app writes only to its Electron user-data directory (`~/Library/Application Support/BT Applicant`, `%APPDATA%\BT Applicant`, or `~/.config/BT Applicant`): database, logs, uploaded resumes, mock outbox, exports.
+- Platform branches in code: `titleBarStyle` and `trafficLightPosition` apply only on macOS, `app.setAppUserModelId` only on Windows (taskbar grouping and toast attribution), the window keeps the native title bar elsewhere, `⌘K` becomes `Ctrl+K`, and secret-store copy names the store the OS actually uses. Minimum window size is 980x640, relaxed from 1120x760 so the window is not taller than a 768p laptop screen; the rendering at that size has not been reviewed visually on any platform.
 
 ## 14. Deliberate limits
 

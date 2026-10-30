@@ -15,7 +15,7 @@ Scope: a single-user desktop app that stores a candidate's personal data, talks 
 
 | Threat | Actor | Impact | Primary controls |
 | --- | --- | --- | --- |
-| Another local user or malware reads app data | Local | Personal data exposure | OS user isolation, keychain-encrypted secrets, no network listener, FileVault recommended |
+| Another local user or malware reads app data | Local | Personal data exposure | OS user isolation, secrets encrypted by the OS store, no network listener, disk encryption recommended |
 | Stolen laptop | Physical | Data exposure | OS login and disk encryption; app has no separate lock |
 | Malicious or compromised job posting | Remote | SSRF, resource exhaustion, prompt injection | URL guard, response size cap, timeouts, HTML parsed as text, AI output validated |
 | Phishing or hostile career page | Remote | Credential theft, malware | Guided window is sandboxed with Node disabled; external links open in the OS browser; app never asks for employer credentials |
@@ -25,14 +25,14 @@ Scope: a single-user desktop app that stores a candidate's personal data, talks 
 | Cross-site scripting in the renderer | Local/remote content | Data theft, arbitrary IPC calls | React escaping, CSP with no remote scripts, context isolation, validated IPC, no Node |
 | Secret leakage in logs | Local | Credential theft | pino redaction paths; secrets never logged by handlers |
 | Forged or replayed chat message | Remote | Unauthorized approval, data disclosure | Numeric allowlist, WhatsApp HMAC + verify token, Telegram long polling with no public inbound port, message-ID dedupe, two-step codes |
-| Chat bot token theft | Remote/local | Bot impersonation, message access | Keychain encryption, token redaction, no token in renderer, revoke in @BotFather |
+| Chat bot token theft | Remote/local | Bot impersonation, message access | OS-store encryption, token redaction, no token in renderer, revoke in @BotFather |
 | Sensitive action from a stolen phone | Remote | Wrong application approved or rejected | Six-digit single-use code shown only in the requesting chat, five-minute expiry, channel binding, audit events |
 | Chat notification data egress | Remote | Personal data leaves machine | Chat off by default; event summaries only; no bodies, resumes, or codes; user-controlled channel |
 | Webhook exposed beyond loopback | Network | Unauthenticated command injection | Bind 127.0.0.1 only; user-managed TLS tunnel; GET verify token; HMAC on every POST; 1 MB cap; timeouts |
 | Supply-chain compromise | Package ecosystem | Code execution | Small dependency set, lockfile, no postinstall scripts in the app runtime |
 | Unsigned build tampering | Distribution | Malware bundle | Distribution requires signing and notarisation; see section 13 |
 
-Non-goals: defending against a compromised OS account with debugger access, a malicious kernel, or an attacker who can read the Keychain while the user is logged in.
+Non-goals: defending against a compromised OS account with debugger access, a malicious kernel, or an attacker who can read the OS secret store while the user is logged in. On every supported platform the secret store is bound to the user's session, not to this app: a process running as the same user can ask the OS to decrypt it.
 
 ## 3. Electron hardening
 
@@ -61,7 +61,8 @@ Implemented in `src/main/index.ts` and `src/preload/index.ts`:
 
 ## 5. Secrets
 
-- SMTP password, AI keys, and the four chat credentials (Telegram bot token, WhatsApp access token, verify token, app secret) are encrypted with Electron `safeStorage`, which is backed by the macOS Keychain.
+- SMTP password, AI keys, and the four chat credentials (Telegram bot token, WhatsApp access token, verify token, app secret) are encrypted with Electron `safeStorage`, which uses the platform's own store: the macOS Keychain, Windows data protection (DPAPI, `CryptProtectData` bound to the user account), or a freedesktop Secret Service keyring on Linux (GNOME Keyring or KWallet).
+- Verified in this build: the macOS path, including storage, retrieval, and removal through the UI and the packaged-app check. The Windows and Linux stores are provided by Electron and the OS, not by this repository, and have not been exercised on those platforms. On Linux, store a secret once to confirm a keyring exists; without one `safeStorage.isEncryptionAvailable()` is false, and storing or reading a secret fails closed with an error on screen and in the log.
 - If `safeStorage.isEncryptionAvailable()` is false, encryption and decryption fail closed; the app refuses to store or use secrets.
 - Ciphertext is stored in the `secrets` table. There is no plaintext fallback in production. A memory cipher exists only in tests.
 - The renderer never receives a secret value. Settings show whether a secret is present.
@@ -142,7 +143,7 @@ Chat is optional and off until the user configures it. It uses official APIs onl
 
 - `chat_messages` stores direction, chat reference, a summary capped at 500 characters, command name, status, and a truncated error. No full bodies.
 - `chat_actions` stores the code hash, reason, timestamps, and consumption state; expired rows are pruned by the retention job.
-- Chat credentials live in the Keychain and are never returned to the renderer.
+- Chat credentials live in the OS secret store and are never returned to the renderer.
 - Turning chat off stops polling and closes the webhook; the credentials remain until removed.
 
 ## 11. Logging, events, and retention
@@ -160,18 +161,19 @@ Chat is optional and off until the user configures it. It uses official APIs onl
 
 ## 13. Packaging and distribution
 
-The local build is intentionally unsigned:
+Every platform's build is intentionally unsigned:
 
-- `identity: null`, `hardenedRuntime: false`, no notarisation.
-- It runs on the build machine and can be inspected. On other machines macOS Gatekeeper will warn or block it.
+- macOS: `identity: null`, `hardenedRuntime: false`, no notarisation. It runs on the build machine; on other Macs Gatekeeper will warn or block it.
+- Windows: the NSIS installer and `bt-applicant.exe` carry no Authenticode signature, so SmartScreen will present them as an unsigned download. `app.setAppUserModelId('com.bitecodes.btapplicant')` is called so taskbar grouping and toast notifications attribute to the app rather than to the Electron host; neither effect has been observed on a Windows machine yet.
+- Linux: the AppImage is unsigned and unauthenticated. The desktop entry is generated from `desktopName` in `package.json` (`com.bitecodes.btapplicant.desktop`) with `linux.syncDesktopName: true`, which is what Electron uses for its app id and `WM_CLASS`; not exercised on a Linux desktop.
 
 Before distributing:
 
-1. Sign with a Developer ID Application certificate.
-2. Enable hardened runtime and sign entitlements appropriate to Electron (typically `com.apple.security.cs.allow-jit`).
-3. Notarise with `notarytool` and staple the ticket.
+1. macOS: sign with a Developer ID Application certificate, enable the hardened runtime with Electron's entitlements (typically `com.apple.security.cs.allow-jit`), notarise with `notarytool`, and staple the ticket.
+2. Windows: sign the executable and the installer with an Authenticode certificate and a timestamp.
+3. Linux: publish through a signed repository, Flatpak, or at minimum a checksummed AppImage.
 4. Publish over HTTPS with a checksum and a changelog.
-5. Keep the app free of remote code loading; updates should ship as signed app bundles, not downloaded scripts.
+5. Keep the app free of remote code loading; updates should ship as signed bundles, not downloaded scripts.
 
 There is no auto-update channel. Remote code loading would undermine the CSP and review model.
 
@@ -179,13 +181,14 @@ There is no auto-update channel. Remote code loading would undermine the CSP and
 
 | Risk | Why accepted | Mitigation / advice |
 | --- | --- | --- |
-| Database not encrypted at rest | Keychain-backed full-DB encryption adds complexity and key-loss risk for a single user | Use FileVault; protect the OS account |
+| Database not encrypted at rest | Per-secret OS encryption is already in place; full-DB encryption adds key-loss risk for a single user | Use FileVault, BitLocker, or an encrypted home directory; protect the OS account |
 | No app-level lock | OS session is the practical boundary | Lock the screen; separate OS account for shared machines |
 | DNS rebinding in URL fetch | In-process fetch resolves again; pinning needs a custom dispatcher | Only add trusted career-page URLs; the response is never forwarded |
 | Hostile employer pages | The app cannot audit third-party sites | Guided window is sandboxed; user completes forms manually |
 | SMTP delivery uncertainty | SMTP has no transaction ID | Outbox marks `sending` as uncertain; manual check before retry |
 | Email addresses in events/logs | Useful audit trail for the user | Local only; retention pruning; do not share exports blindly |
-| Unsigned build | No Apple credentials in this environment | Sign and notarise before distribution |
+| Unsigned build | No Apple, Authenticode, or code-signing credentials in this environment | Sign (and notarise on macOS) before distribution |
+| Windows and Linux builds have never run on their native platforms | Development happens on one macOS machine | Run `pnpm verify:all` on a Windows and a Linux machine before trusting those artifacts; secret storage, keyring availability, and notification delivery are the specific unknowns |
 | Dependency vulnerabilities | Not audited as part of this build | Run `pnpm audit --prod` and update before distribution |
 | Schedules while asleep | Desktop constraint | Missed runs catch up on launch; the UI states this |
 | WhatsApp tunnel is user-managed | The app cannot provision or audit third-party tunnel services | Terminate TLS at a trusted tunnel; keep the webhook path and verify token secret; stop the tunnel when chat is off |
@@ -203,6 +206,7 @@ There is no auto-update channel. Remote code loading would undermine the CSP and
 - The E2E run watches renderer `pageerror` and console errors; the suite fails on unexpected errors.
 - Secret handling is covered indirectly by application tests that store and use an SMTP password through the secret store.
 - No live Telegram or WhatsApp credential was used in automated tests, and no inbound tunnel was exercised. Those flows are covered by unit tests around the clients and the webhook handler, not by an end-to-end message from a real account.
+- Cross-platform status: typecheck, 121 unit and integration tests, both E2E scenarios, the release build, and the packaged first-run check pass on macOS 27.2 arm64 (evidence in [TEST-REPORT.md](./TEST-REPORT.md)). The Windows NSIS/ZIP and Linux AppImage/ZIP targets build successfully from this macOS host, but neither has been installed or launched on native hardware, so their secret store, notifications, and window behaviour are unverified.
 - No automated penetration test or dependency audit has been run. Treat this document as a design description, not a certification.
 
 ## 16. Reporting a security issue
