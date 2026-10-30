@@ -1,0 +1,263 @@
+{
+  "version": 1,
+  "lastVerified": "2026-10-28",
+  "disclaimer": "Decision aid only, not legal advice. Each rule cites its source. Verify current immigration rules before relying on a verdict.",
+  "blocs": [
+    {
+      "id": "eu-eea-ch",
+      "name": "EU / EEA / Switzerland free movement",
+      "effect": "work_without_sponsorship",
+      "members": [
+        "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT",
+        "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "CH"
+      ],
+      "confidence": "high",
+      "note": "Citizens of EU/EEA member states and Switzerland may work in each other's countries without employer sponsorship.",
+      "sourceUrl": "https://european-union.europa.eu/choose-country-eu/eu-countries_en"
+    },
+    {
+      "id": "uk-ie-cta",
+      "name": "UK–Ireland Common Travel Area",
+      "effect": "work_without_sponsorship",
+      "members": ["GB", "IE", "IM", "JE", "GG"],
+      "confidence": "high",
+      "note": "Irish and British citizens have the right to live and work in each other's countries under the Common Travel Area.",
+      "sourceUrl": "https://www.gov.uk/government/publications/common-travel-area-guidance"
+    },
+    {
+      "id": "trans-tasman",
+      "name": "Trans-Tasman Travel Arrangement",
+      "effect": "work_without_sponsorship",
+      "members": ["AU", "NZ"],
+      "confidence": "high",
+      "note": "Australian citizens may work in New Zealand and New Zealand citizens may work in Australia under the Trans-Tasman arrangement.",
+      "sourceUrl": "https://www.immigration.govt.nz/about-us/policy-and-law/how-the-immigration-system-operates/trans-tasman-travel-arrangement"
+    },
+    {
+      "id": "nordic",
+      "name": "Nordic Convention",
+      "effect": "work_without_sponsorship",
+      "members": ["DK", "FI", "IS", "NO", "SE"],
+      "confidence": "high",
+      "note": "Nordic citizens may work in other Nordic countries; these countries are also covered by EU/EEA and Swiss free movement.",
+      "sourceUrl": "https://www.norden.org/en/info-norden/nordic-convention"
+    },
+    {
+      "id": "gcc",
+      "name": "GCC citizens",
+      "effect": "residence_route",
+      "members": ["AE", "SA", "QA", "KW", "BH", "OM"],
+      "confidence": "medium",
+      "note": "GCC citizens generally enjoy freedom of movement and work privileges, but procedures vary by country. Treated as requiring review, not automatic eligibility.",
+      "sourceUrl": "https://www.gcc-sg.org/en-us/"
+    },
+    {
+      "id": "mercosur",
+      "name": "Mercosur residence agreement",
+      "effect": "residence_route",
+      "members": ["AR", "BR", "PY", "UY"],
+      "confidence": "medium",
+      "note": "Mercosur provides a residence route rather than unconditional free movement; an application is still required.",
+      "sourceUrl": "https://www.mercosur.int/"
+    }
+  ],
+  "bilateralRoutes": [
+    {
+      "id": "us-tn",
+      "name": "US TN status",
+      "destination": "US",
+      "citizenships": ["CA", "MX"],
+      "effect": "employer_support_required",
+      "confidence": "high",
+      "note": "TN status is available to Canadian and Mexican citizens, but requires a job offer and employer support letter. It is not sponsorship in the lottery sense.",
+      "sourceUrl": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/tn-nafta-professionals"
+    },
+    {
+      "id": "us-e3",
+      "name": "US E-3 specialty occupation",
+      "destination": "US",
+      "citizenships": ["AU"],
+      "effect": "employer_support_required",
+      "confidence": "high",
+      "note": "E-3 status is available to Australian citizens with a qualifying job offer and employer-filed labor condition application.",
+      "sourceUrl": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/e-3-specialty-occupation-workers-from-australia"
+    },
+    {
+      "id": "us-h1b",
+      "name": "US H-1B sponsorship",
+      "destination": "US",
+      "citizenships": [],
+      "effect": "employer_sponsorship_required",
+      "confidence": "high",
+      "note": "Requires an employer sponsor and is subject to an annual cap and lottery for most petitions.",
+      "sourceUrl": "https://www.uscis.gov/working-in-the-united-states/temporary-workers/h-1b-specialty-occupations"
+    },
+    {
+      "id": "ca-cusma",
+      "name": "Canada CUSMA professional",
+      "destination": "CA",
+      "citizenships": ["US", "MX"],
+      "effect": "employer_support_required",
+      "confidence": "high",
+      "note": "CUSMA professionals need a qualifying job offer and employer documentation, but no labor market impact assessment.",
+      "sourceUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/work-canada/permit/temporary/international-mobility-program.html"
+    },
+    {
+      "id": "gb-skilled-worker",
+      "name": "UK Skilled Worker visa",
+      "destination": "GB",
+      "citizenships": [],
+      "effect": "employer_sponsorship_required",
+      "confidence": "high",
+      "note": "Requires a job offer from a Home Office licensed sponsor and a certificate of sponsorship.",
+      "sourceUrl": "https://www.gov.uk/skilled-worker-visa"
+    },
+    {
+      "id": "de-blue-card",
+      "name": "Germany EU Blue Card",
+      "destination": "DE",
+      "citizenships": [],
+      "effect": "employer_sponsorship_required",
+      "confidence": "high",
+      "note": "Requires a qualifying job offer and salary threshold; employer support is required for the application.",
+      "sourceUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/eu-blue-card"
+    },
+    {
+      "id": "nl-hsm",
+      "name": "Netherlands highly skilled migrant",
+      "destination": "NL",
+      "citizenships": [],
+      "effect": "employer_sponsorship_required",
+      "confidence": "high",
+      "note": "Requires an employer recognised by the IND as a sponsor.",
+      "sourceUrl": "https://ind.nl/en/residence-permits/work/highly-skilled-migrant"
+    },
+    {
+      "id": "au-tss",
+      "name": "Australia Temporary Skill Shortage",
+      "destination": "AU",
+      "citizenships": [],
+      "effect": "employer_sponsorship_required",
+      "confidence": "high",
+      "note": "Requires an approved business sponsor and nominated occupation.",
+      "sourceUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/temporary-skill-shortage-482"
+    }
+  ],
+  "sponsorshipSignals": [
+    {
+      "id": "offered.available",
+      "signal": "sponsorship_offered",
+      "pattern": "visa sponsorship (?:is )?(?:available|provided|offered)"
+    },
+    {
+      "id": "offered.short",
+      "signal": "sponsorship_offered",
+      "pattern": "sponsorship (?:is )?(?:available|provided|offered)"
+    },
+    {
+      "id": "offered.we-sponsor",
+      "signal": "sponsorship_offered",
+      "pattern": "(?:we|company|employer) (?:do|will|can|are happy to|are willing to) sponsor"
+    },
+    {
+      "id": "offered.willing",
+      "signal": "sponsorship_offered",
+      "pattern": "(?:able|happy|willing|ready) to (?:provide |offer )?(?:visa )?sponsor(?:ship)?"
+    },
+    {
+      "id": "offered.work-permit",
+      "signal": "sponsorship_offered",
+      "pattern": "work permit (?:support|assistance|sponsorship)"
+    },
+    {
+      "id": "offered.we-sponsor-visas",
+      "signal": "sponsorship_offered",
+      "pattern": "we sponsor (?:work )?visas"
+    },
+    {
+      "id": "not-offered.unable",
+      "signal": "sponsorship_not_offered",
+      "pattern": "(?:we are |we're |we )?(?:not able|unable) to (?:provide |offer )?(?:visa )?sponsor"
+    },
+    {
+      "id": "not-offered.do-not",
+      "signal": "sponsorship_not_offered",
+      "pattern": "(?:do|does) not (?:provide |offer )?(?:visa )?sponsorship"
+    },
+    {
+      "id": "not-offered.no",
+      "signal": "sponsorship_not_offered",
+      "pattern": "no (?:visa )?sponsorship"
+    },
+    {
+      "id": "not-offered.not-available",
+      "signal": "sponsorship_not_offered",
+      "pattern": "sponsorship (?:is )?not (?:available|offered|provided)"
+    },
+    {
+      "id": "not-offered.without",
+      "signal": "sponsorship_not_offered",
+      "pattern": "without (?:visa )?sponsorship"
+    },
+    {
+      "id": "not-offered.cannot",
+      "signal": "sponsorship_not_offered",
+      "pattern": "(?:cannot|can't|won't) sponsor"
+    },
+    {
+      "id": "rtw.must-have",
+      "signal": "existing_right_to_work_required",
+      "pattern": "(?:must|need to|required to|should) (?:already )?(?:have|possess) (?:the )?(?:legal )?right to work"
+    },
+    {
+      "id": "rtw.in-country",
+      "signal": "existing_right_to_work_required",
+      "pattern": "right to work in (?:the )?(?:uk|united kingdom|us|usa|united states|eu|europe|ireland|canada|australia|germany|netherlands|france|spain|portugal|sweden|denmark|norway|finland|switzerland|singapore|japan|uae)"
+    },
+    {
+      "id": "rtw.authorized",
+      "signal": "existing_right_to_work_required",
+      "pattern": "(?:must be|are) (?:legally )?(?:authorized|eligible) to work"
+    },
+    {
+      "id": "rtw.no-visa-support",
+      "signal": "existing_right_to_work_required",
+      "pattern": "no visa support"
+    },
+    {
+      "id": "rtw.valid-permit",
+      "signal": "existing_right_to_work_required",
+      "pattern": "must have (?:a )?valid work permit"
+    },
+    {
+      "id": "rtw.existing",
+      "signal": "existing_right_to_work_required",
+      "pattern": "existing (?:right to work|work authori[sz]ation)"
+    },
+    {
+      "id": "citizenship.only",
+      "signal": "citizenship_or_clearance_required",
+      "pattern": "(?:us|u\\.s\\.|united states|uk|british|eu|european|australian|canadian|irish) (?:citizens?|citizenship) only"
+    },
+    {
+      "id": "citizenship.must-be",
+      "signal": "citizenship_or_clearance_required",
+      "pattern": "must be (?:a )?(?:us|u\\.s\\.|uk|british|eu|european|australian|canadian|irish) citizen"
+    },
+    {
+      "id": "clearance.required",
+      "signal": "citizenship_or_clearance_required",
+      "pattern": "(?:active|current|valid|obtain|hold) (?:security )?clearance"
+    },
+    {
+      "id": "clearance.sc",
+      "signal": "citizenship_or_clearance_required",
+      "pattern": "(?:sc|dv|nv|ts|top secret) cleared"
+    },
+    {
+      "id": "clearance.generic",
+      "signal": "citizenship_or_clearance_required",
+      "pattern": "security clearance (?:is )?required"
+    }
+  ]
+}

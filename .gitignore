@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+release/
+.dev-data/
+artifacts/
+playwright-report/
+test-results/
+*.log
+.DS_Store
+.env
+.env.local
+coverage/
+.tmp/

@@ -1,0 +1,385 @@
+{
+  "checkedAt": "2026-10-28T07:00:07.448Z",
+  "attempts": [
+    {
+      "connector": "greenhouse",
+      "target": "stripe",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"stripe\" responded with 715 postings.",
+      "sampleCount": 715,
+      "sampleTitles": [
+        "Abuse Investigator",
+        "Abuse Investigator",
+        "Abuse Investigator",
+        "Abuse Research Engineer",
+        "Account Executive, AI Sales"
+      ],
+      "latencyMs": 1347
+    },
+    {
+      "connector": "greenhouse",
+      "target": "figma",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"figma\" responded with 142 postings.",
+      "sampleCount": 142,
+      "sampleTitles": [
+        "Account Executive, Enterprise",
+        "Account Executive, Enterprise (Bengaluru, India)",
+        "Account Executive, Enterprise (Berlin, Germany)",
+        "Account Executive, Enterprise (London, United Kingdom)",
+        "Account Executive, Enterprise, Mandarin Speaking (Singapore)"
+      ],
+      "latencyMs": 308
+    },
+    {
+      "connector": "greenhouse",
+      "target": "discord",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"discord\" responded with 46 postings.",
+      "sampleCount": 46,
+      "sampleTitles": [
+        "Commercial Policy Lead",
+        "Data Scientist - Client Platform",
+        "Engineering Manager, Machine Learning (Safety)",
+        "Engineering Manager, Notifications",
+        "Engineering Manager, Platform Security"
+      ],
+      "latencyMs": 342
+    },
+    {
+      "connector": "greenhouse",
+      "target": "datadog",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"datadog\" responded with 424 postings.",
+      "sampleCount": 424,
+      "sampleTitles": [
+        "Accounts Payable Analyst",
+        "AI Research Engineer - Datadog AI Research (DAIR)",
+        "AI Research Scientist - Datadog AI Research (DAIR)",
+        "AI Research Scientist - Datadog AI Research (DAIR)",
+        "Applied Science Intern"
+      ],
+      "latencyMs": 395
+    },
+    {
+      "connector": "greenhouse",
+      "target": "cloudflare",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"cloudflare\" responded with 461 postings.",
+      "sampleCount": 461,
+      "sampleTitles": [
+        "Account Executive, FedCiv",
+        "Account Executive, Indonesia",
+        "AI Security Research & Red Team Engineer",
+        "Associate, Strategic Finance & Investor Relations",
+        "Business Development Representative"
+      ],
+      "latencyMs": 333
+    },
+    {
+      "connector": "greenhouse",
+      "target": "gitlab",
+      "country": "US",
+      "ok": true,
+      "message": "Greenhouse board \"gitlab\" responded with 236 postings.",
+      "sampleCount": 236,
+      "sampleTitles": [
+        "AI Transformation Owner, CRO",
+        "AI Transformation Owner, Product & Design",
+        "Associate Renewals Manager, India",
+        "Associate Renewals Manager, SMB",
+        "Associate Revenue Operations Manager, India"
+      ],
+      "latencyMs": 311
+    },
+    {
+      "connector": "lever",
+      "target": "gopuff",
+      "country": "US",
+      "ok": true,
+      "message": "Lever company \"gopuff\" responded with 5 postings.",
+      "sampleCount": 5,
+      "sampleTitles": [
+        "Analytics Engineer",
+        "Beer Store Manager, Bridgeport, #539, 3 Rivers Beer LLC",
+        "Department Manager - Beaumont",
+        "Department Manager - Bowling Green",
+        "Digital Merchandising Coordinator"
+      ],
+      "latencyMs": 14555
+    },
+    {
+      "connector": "lever",
+      "target": "kraken",
+      "country": "US",
+      "ok": true,
+      "message": "Lever company \"kraken\" responded with 0 postings.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 1823
+    },
+    {
+      "connector": "ashby",
+      "target": "openai",
+      "country": "US",
+      "ok": true,
+      "message": "Ashby organization \"openai\" responded with 805 postings.",
+      "sampleCount": 805,
+      "sampleTitles": [
+        "Research Engineer",
+        "Research Engineer, Retrieval & Search, Applied Engineering",
+        "Researcher, Safety Training",
+        "Software Engineer, Scaled Abuse",
+        "Software Engineer, Data Infrastructure"
+      ],
+      "latencyMs": 767
+    },
+    {
+      "connector": "ashby",
+      "target": "ramp",
+      "country": "US",
+      "ok": true,
+      "message": "Ashby organization \"ramp\" responded with 172 postings.",
+      "sampleCount": 172,
+      "sampleTitles": [
+        " Security Engineer, Cloud",
+        "Mobile Engineer, Android",
+        "Software Engineer, Frontend",
+        "Credit Risk Associate",
+        "Account Executive | Strategic "
+      ],
+      "latencyMs": 371
+    },
+    {
+      "connector": "ashby",
+      "target": "linear",
+      "country": "US",
+      "ok": true,
+      "message": "Ashby organization \"linear\" responded with 32 postings.",
+      "sampleCount": 32,
+      "sampleTitles": [
+        "Senior / Staff Fullstack Engineer",
+        "Senior / Staff Fullstack Engineer",
+        "Senior / Staff Product Engineer",
+        "Senior / Staff Product Engineer",
+        "Product Engineer"
+      ],
+      "latencyMs": 271
+    },
+    {
+      "connector": "smartrecruiters",
+      "target": "Ubisoft2",
+      "country": "US",
+      "ok": true,
+      "message": "SmartRecruiters company \"Ubisoft2\" responded with 5 postings.",
+      "sampleCount": 5,
+      "sampleTitles": [
+        "APL Brand Manager & Regional Esports, APAC",
+        "Modeler (Vegetation)",
+        "Modeleur·euse (végétation)",
+        "Programmeur Outils - TGQF",
+        "Programmeur.euse en apprentissage automatique"
+      ],
+      "latencyMs": 765
+    },
+    {
+      "connector": "smartrecruiters",
+      "target": "Visa",
+      "country": "US",
+      "ok": true,
+      "message": "SmartRecruiters company \"Visa\" responded with 0 postings.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 474
+    },
+    {
+      "connector": "workable",
+      "target": "workable",
+      "country": "US",
+      "ok": false,
+      "message": "Workable account \"workable\" failed: HTTP 404",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 524
+    },
+    {
+      "connector": "workable",
+      "target": "huggingface",
+      "country": "US",
+      "ok": true,
+      "message": "Workable account \"huggingface\" responded with 6 postings.",
+      "sampleCount": 6,
+      "sampleTitles": [
+        "Open-Source Machine Learning Engineer - EMEA Remote",
+        "Open-Source Machine Learning Engineer - US Remote",
+        "Senior Machine Learning Engineer, Voice Agents - EMEA Remote",
+        "Senior Open-Source Python Engineer, ML Developer Tools - EMEA Remote",
+        "Senior Open-Source Python Engineer, ML Developer Tools - US Remote"
+      ],
+      "latencyMs": 548
+    },
+    {
+      "connector": "remotive",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "Remotive responded with 10 jobs.",
+      "sampleCount": 10,
+      "sampleTitles": [
+        "AI Trainer - Video Annotation",
+        "Software Engineer, AI Coding Tasks",
+        "Tech Lead Full-Stack Rails Engineer",
+        "Remote Office Assistant",
+        "Inside Sales Contractor"
+      ],
+      "latencyMs": 236
+    },
+    {
+      "connector": "arbeitnow",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "Arbeitnow responded with 300 jobs on page 1.",
+      "sampleCount": 300,
+      "sampleTitles": [
+        "Team Lead, SEO & GEO (all genders)",
+        "Senior UX Strategist & Researcher (f/m/x)",
+        "Senior Indirect Procurement Category Manager - Marketing (All genders)",
+        "Senior Category Manager - Strategic Sourcing (Packaging)",
+        "Director, Paid Search (all genders)- maternity leave cover"
+      ],
+      "latencyMs": 402
+    },
+    {
+      "connector": "jobicy",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "Jobicy responded with 5 jobs.",
+      "sampleCount": 5,
+      "sampleTitles": [
+        "Business Consultant (6 months contract with possible extension)",
+        "Enterprise Account Executive, Marketplaces",
+        "Account Manager, Ada Accelerate",
+        "Engineering Manager - Feegow (100% Remote within Brazil)",
+        "Algorithms Engineer"
+      ],
+      "latencyMs": 7895
+    },
+    {
+      "connector": "himalayas",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "Himalayas responded with 131264 jobs.",
+      "sampleCount": 5,
+      "sampleTitles": [
+        "Customer Support Representative (CSR I)  Apprentice",
+        "Senior Data Analyst - Analytics and Automation",
+        "Multimedia Content Reviewer - es-MX",
+        "Executive Assistant (Business Support)",
+        "Email Coordinator"
+      ],
+      "latencyMs": 486
+    },
+    {
+      "connector": "remoteok",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "Remote OK responded with 99 jobs.",
+      "sampleCount": 99,
+      "sampleTitles": [
+        "Account Executive",
+        "Senior Software Engineer LATAM",
+        "Senior Software Engineer",
+        "Field Phlebotomy Supervisor Northern California",
+        "Solutions Engineer"
+      ],
+      "latencyMs": 2312
+    },
+    {
+      "connector": "themuse",
+      "target": "(default feed)",
+      "country": "US",
+      "ok": true,
+      "message": "The Muse responded with 414937 jobs.",
+      "sampleCount": 20,
+      "sampleTitles": [
+        "LPN - Inpatient",
+        "PCB Technician (Starlink)",
+        "Retail Sales Merchander",
+        "Staff Machine Learning Engineer",
+        "Travel Retail Sales Merchandiser"
+      ],
+      "latencyMs": 543
+    },
+    {
+      "connector": "jsonld",
+      "target": "https://jobs.lever.co/gopuff/bfa7bc15-793e-486c-a3f5-b27d84c53025",
+      "country": "US",
+      "ok": true,
+      "message": "Found 1 schema.org JobPosting entries on https://jobs.lever.co/gopuff/bfa7bc15-793e-486c-a3f5-b27d84c53025.",
+      "sampleCount": 1,
+      "sampleTitles": [
+        "Analytics Engineer"
+      ],
+      "latencyMs": 766
+    },
+    {
+      "connector": "jsonld",
+      "target": "https://job-boards.greenhouse.io/gitlab",
+      "country": "US",
+      "ok": false,
+      "message": "The page loaded but no schema.org JobPosting JSON-LD was found on https://job-boards.greenhouse.io/gitlab.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 1042
+    },
+    {
+      "connector": "jsonld",
+      "target": "https://himalayas.app/jobs",
+      "country": "US",
+      "ok": false,
+      "message": "Career page failed: HTTP 403",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 145
+    },
+    {
+      "connector": "jsonld",
+      "target": "https://www.smartrecruiters.com/Ubisoft2",
+      "country": "US",
+      "ok": false,
+      "message": "The page loaded but no schema.org JobPosting JSON-LD was found on https://www.smartrecruiters.com/Ubisoft2.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 2261
+    },
+    {
+      "connector": "adzuna",
+      "target": "(credentials required)",
+      "country": "US",
+      "ok": false,
+      "message": "Adzuna credentials are missing.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 0
+    },
+    {
+      "connector": "usajobs",
+      "target": "(credentials required)",
+      "country": "US",
+      "ok": false,
+      "message": "USAJOBS credentials are missing.",
+      "sampleCount": 0,
+      "sampleTitles": [],
+      "latencyMs": 0
+    }
+  ]
+}
